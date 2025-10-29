@@ -16,16 +16,13 @@ public class Main {
 
     public static void main(String[] args) {
         MovieService movieService = (MovieService) injector.getInstance(MovieService.class);
-        CinemaHallService cinemaHallService =
-                (CinemaHallService) injector.getInstance(CinemaHallService.class);
-        MovieSessionService movieSessionService =
-                (MovieSessionService) injector.getInstance(MovieSessionService.class);
-
         Movie fastAndFurious = new Movie("Fast and Furious");
         fastAndFurious.setDescription("An action film about street racing.");
         movieService.add(fastAndFurious);
         System.out.println("Added movie: " + movieService.get(fastAndFurious.getId()));
 
+        CinemaHallService cinemaHallService =
+                (CinemaHallService) injector.getInstance(CinemaHallService.class);
         CinemaHall blueHall = new CinemaHall();
         blueHall.setCapacity(100);
         blueHall.setDescription("Blue Hall with comfy seats");
@@ -37,6 +34,9 @@ public class Main {
         movieSession.setCinemaHall(blueHall);
         LocalDateTime sessionTime = LocalDate.now().atTime(19, 30);
         movieSession.setShowTime(sessionTime);
+
+        MovieSessionService movieSessionService =
+                (MovieSessionService) injector.getInstance(MovieSessionService.class);
         movieSessionService.add(movieSession);
         System.out.println("Added movie session: " + movieSessionService.get(movieSession.getId()));
 
