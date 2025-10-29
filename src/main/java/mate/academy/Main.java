@@ -2,7 +2,6 @@ package mate.academy;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import mate.academy.lib.Injector;
 import mate.academy.model.CinemaHall;
 import mate.academy.model.Movie;
@@ -19,7 +18,8 @@ public class Main {
         Movie fastAndFurious = new Movie("Fast and Furious");
         fastAndFurious.setDescription("An action film about street racing.");
         movieService.add(fastAndFurious);
-        System.out.println("Added movie: " + movieService.get(fastAndFurious.getId()));
+        System.out.println(movieService.get(fastAndFurious.getId()));
+        movieService.getAll().forEach(System.out::println);
 
         CinemaHallService cinemaHallService =
                 (CinemaHallService) injector.getInstance(CinemaHallService.class);
@@ -27,7 +27,14 @@ public class Main {
         blueHall.setCapacity(100);
         blueHall.setDescription("Blue Hall with comfy seats");
         cinemaHallService.add(blueHall);
-        System.out.println("Added cinema hall: " + cinemaHallService.get(blueHall.getId()));
+
+        CinemaHall redHall = new CinemaHall();
+        redHall.setCapacity(120);
+        redHall.setDescription("Red IMAX Hall");
+        cinemaHallService.add(redHall);
+
+        System.out.println(cinemaHallService.get(blueHall.getId()));
+        cinemaHallService.getAll().forEach(System.out::println);
 
         MovieSession movieSession = new MovieSession();
         movieSession.setMovie(fastAndFurious);
@@ -38,13 +45,10 @@ public class Main {
         MovieSessionService movieSessionService =
                 (MovieSessionService) injector.getInstance(MovieSessionService.class);
         movieSessionService.add(movieSession);
-        System.out.println("Added movie session: " + movieSessionService.get(movieSession.getId()));
+        System.out.println(movieSessionService.get(movieSession.getId()));
 
         LocalDate today = LocalDate.now();
-        List<MovieSession> availableSessions =
-                movieSessionService.findAvailableSessions(fastAndFurious.getId(), today);
-        System.out.println("Available sessions for '" + fastAndFurious.getTitle()
-                + "' on " + today + ":");
-        availableSessions.forEach(System.out::println);
+        movieSessionService.findAvailableSessions(fastAndFurious.getId(), today)
+                .forEach(System.out::println);
     }
 }

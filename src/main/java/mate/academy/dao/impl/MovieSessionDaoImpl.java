@@ -23,12 +23,13 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
             session.persist(movieSession);
+            transaction.commit();
             return movieSession;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new DataProcessingException("Could not save movieSession", e);
+            throw new DataProcessingException("Can't insert a movie session: " + movieSession, e);
         } finally {
             if (session != null) {
                 session.close();
@@ -41,7 +42,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return Optional.ofNullable(session.get(MovieSession.class, id));
         } catch (Exception e) {
-            throw new DataProcessingException("Could not get movieSession", e);
+            throw new DataProcessingException("Can't get a movie session by id: " + id, e);
         }
     }
 
